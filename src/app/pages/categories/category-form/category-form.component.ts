@@ -39,6 +39,10 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     this.setPageTitle();
   }
 
+  submitForm() {
+    this.submittingForm = true;
+    this.currentAction == 'new' ? this.createCategory() : this.updateCategory();
+  }
 
   private loadCategory(): any {
     if (this.currentAction == 'edit') {
@@ -70,11 +74,50 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
 
   private setPageTitle(): any {
     if (this.currentAction == 'new') {
-      this.pageTitle = 'cadastro de Nova Categoria';
+      this.pageTitle = 'Cadastro de Nova Categoria';
     }
     else {
       const categoryName = this.category.name || '';
       this.pageTitle = `Editando Categoria: ${categoryName}` ;
     }
   }
+
+  private createCategory(): any {
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+    this.categoryService.create(category)
+      .subscribe(
+        category => this.actionForSuccess(category),
+        error => this.actionsForError(error)
+      )
+  }
+
+  private updateCategory(): any {
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+    this.categoryService.update(category)
+      .subscribe(
+        category => this.actionForSuccess(category),
+        error => this.actionsForError(error)
+      )
+  }
+
+  private actionsForError(error: any): void {
+    toastr.error('Ocorreu um erro ao processar a sua solicitação!');
+
+    this.submittingForm = false;
+
+    if(error.status === 442)
+      this.serverErrorMessages = JSON.parse(error.body).errors;
+    else  
+      this.serverErrorMessages = ['Falha na comunicação com o servidor. Por favor, tente mais tarde.']
+  }
+
+  private actionForSuccess(category: Category): void {
+    toastr.success('Solictação processada com sucesso!');
+    
+    // redirect/reload component page
+    this.router.navigateByUrl('categories', {skipLocationChange: true}).then(
+      () => this.router.navigate(['categories',category.id, 'edit'])
+    )
+  }
+ 
 }
