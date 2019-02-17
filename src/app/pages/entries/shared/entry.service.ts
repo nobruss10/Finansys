@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { observable, throwError, Observable } from 'rxjs';
+import { throwError, Observable } from 'rxjs';
 import { map, catchError, flatMap } from 'rxjs/operators';
 import { Entry } from './entry.model';
-import { Category } from '../../categories/shared/category.model';
+
 
 @Injectable({
   providedIn: 'root'
