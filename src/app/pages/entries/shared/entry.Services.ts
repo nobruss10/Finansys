@@ -24,7 +24,7 @@ export class EntryService {
 
   getById(id: number): Observable<Entry> {
     const url = `${this.apiPath}/${id}`;
-    
+
     return this.http.get(url).pipe(
       catchError(this.handleError),
       map(this.jsonDataToEntry)
@@ -43,28 +43,31 @@ export class EntryService {
     return this.http.put(url, entry).pipe(
       catchError(this.handleError),
       map(this.jsonDataToEntry)
-    ) 
+    )
   }
 
   delete(entry: Entry): Observable<any> {
     const url = `${this.apiPath}/${entry.id}`;
     return this.http.delete(url).pipe(
       catchError(this.handleError),
-      map(()=> null)
-    ) 
+      map(() => null)
+    )
   }
 
   private jsonDataToEntries(jsonData: any[]): Entry[] {
     const entries: Entry[] = [];
-    jsonData.forEach( e => entries.push(e as Entry));
+    jsonData.forEach(e => {
+      const entry = Object.assign(new Entry(), e);
+      entries.push(entry);
+    });
     return entries;
   }
 
   private jsonDataToEntry(jsonData: any): Entry {
-    return jsonData as Entry;
+    return Object.assign(new Entry(), jsonData);
   }
 
-  private handleError(error: any ): Observable<any> {
+  private handleError(error: any): Observable<any> {
     console.log("ERRO NA REQUISIÇÃO => ", error)
     return throwError(error);
   }
