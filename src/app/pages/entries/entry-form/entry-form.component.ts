@@ -6,6 +6,9 @@ import { Entry } from '../shared/entry.model';
 import { EntryService } from '../shared/entry.service';
 import { switchMap } from 'rxjs/operators';
 import toastr from 'toastr';
+import { Category } from '../../categories/shared/category.model';
+import { CategoryService } from '../../categories/shared/category.service';
+import { CategoriesModule } from '../../categories/categories.module';
 
 
 @Component({
@@ -21,6 +24,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   serverErrorMessages: string[] = null;
   submittingForm: boolean = false;
   entry: Entry = new Entry();
+  categories: Array<Category> = [];
 
   imaskConfig = {
     mask: Number,
@@ -49,13 +53,15 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     private entryService: EntryService,
     private route: ActivatedRoute,
     private router: Router,
-    private formBuild: FormBuilder
+    private formBuild: FormBuilder,
+    private categoryService : CategoryService
   ) { }
 
   ngOnInit() {
     this.setCurrentAction();
     this.buildCaregoryForm();
-    this.loadEntry()
+    this.loadEntry();
+    this.loadCategories();
   }
 
   ngAfterContentChecked(): void {
@@ -137,6 +143,23 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       this.serverErrorMessages = JSON.parse(error.body).errors;
     else  
       this.serverErrorMessages = ['Falha na comunicação com o servidor. Por favor, tente mais tarde.']
+  }
+
+  get typeOptions(): any {
+    return Object.entries(Entry.types).map(
+      ([value, text]) => {
+        return {
+          value: value,
+          text: text
+        }
+      }
+    )
+  }
+
+  private loadCategories() {
+    this.categoryService.getAll().subscribe(
+      categories => this.categories = categories
+    )
   }
 
   private actionForSuccess(entry: Entry): void {
