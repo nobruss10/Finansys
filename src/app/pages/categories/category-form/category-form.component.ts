@@ -6,7 +6,6 @@ import { Category } from '../shared/category.model';
 import { CategoryService } from '../shared/category.service';
 import { switchMap } from 'rxjs/operators';
 import toastr from 'toastr';
-import { httpInMemBackendServiceFactory } from 'angular-in-memory-web-api';
 
 @Component({
   selector: 'app-category-form',
