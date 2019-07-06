@@ -1,0 +1,17 @@
+<nav>
+  <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a routerLink='/' routerLinkActive="router-link-active">Home</a>
+      </li>
+
+      <li *ngFor='let item of items' class="breadcrumb-item" [class.active]='isTheLasItem(item)'>
+        <span *ngIf="isTheLasItem(item)">
+          {{item.text}}
+        </span>
+        
+        <a *ngIf="!isTheLasItem(item)" [routerLink]="item.link">
+          {{item.text}}
+        </a>
+      </li>
+  </ol>
+</nav>
