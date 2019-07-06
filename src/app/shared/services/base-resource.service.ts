@@ -40,16 +40,16 @@ export abstract class BaseResourceService<T extends BaseResourceModel> {
         )
     }
 
-    update(category: T): Observable<T> {
-        const url = `${this.apiPath}/${category.id}`;
-        return this.http.put(url, category).pipe(
+    update(resource: T): Observable<T> {
+        const url = `${this.apiPath}/${resource.id}`;
+        return this.http.put(url, resource).pipe(
             map(this.jsonDataToResource.bind(this)),
             catchError(this.handleError)
         )
     }
 
-    delete(category: T): Observable<any> {
-        const url = `${this.apiPath}/${category.id}`;
+    delete(resource: T): Observable<any> {
+        const url = `${this.apiPath}/${resource.id}`;
         return this.http.delete(url).pipe(
             map(() => null),
             catchError(this.handleError)            
