@@ -14,5 +14,8 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
   constructor(private entryService: EntryService) {
     super(entryService);
    }
-
+  
+   protected creatinPageTitle(): string {
+    return "Lançamentos";
+  }
 }
