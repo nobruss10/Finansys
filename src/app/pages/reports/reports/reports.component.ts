@@ -49,7 +49,6 @@ export class ReportsComponent implements OnInit {
   generateReports() {
     const month = this.month.nativeElement.value;
     const year = this.year.nativeElement.value;
-    debugger
     if(!month || !year)
       alert('Voce precisa selecionar o Mês e o Ano para gerar os relatórios');
     else 
